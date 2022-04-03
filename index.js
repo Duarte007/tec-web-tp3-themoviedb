@@ -1,29 +1,42 @@
-const getPopularMovies = () => {
-  const url =
-    "https://api.themoviedb.org/3/movie/popular?api_key=86d40ddd2005404ed8a970a382d19c23";
+var lastPage = 1
+var func = 'getPopularMovies'
 
-  fetch(url, { method: "GET" })
-    .then((response) => response.json())
-    .then((data) => {
-      let textHTML = "";
-      const prefixImage = "https://image.tmdb.org/t/p/w500/";
-      data.results.forEach((movie) => {
-        textHTML = `
-        <div class="card" style="width: 18rem">
-        <img src="${
-          prefixImage + movie.poster_path
-        }" class="card-img-top" alt="..." />
-        <div class="card-body">
-          <h5 class="card-title">${movie.title}</h5>
-          <p class="card-text">
-           ${movie.overview}
-          </p>
-          <a href="#" class="btn btn-primary">Mais detalhes...</a>
-        </div>
-        `;
-
-        document.getElementById("movies").innerHTML += textHTML;
-      });
+$(function() {
+    $("li").click(function() {
+        $("li").removeClass("active");
+        $(this).addClass("active");
     });
-};
-document.body.onload = getPopularMovies;
+});
+
+
+function handleWithPagination(page, action) {
+    if (page) {
+        TheMovieDbController[func](page).then((response) => {
+            lastPage = response.total_pages
+            if (page > response.total_pages || page == response.total_pages - 1 || page == response.total_pages - 2 || page == response.total_pages - 3) {
+                page = response.total_pages - 3
+            }
+
+            document.getElementById('first-page').setAttribute("onclick", `handleWithPagination(${page})`)
+            document.getElementById('first-page').textContent = page
+            document.getElementById('first-page').focus()
+            document.getElementById('first-page').parentElement.className = "page-item active"
+            document.getElementById('second-page').setAttribute("onclick", `handleWithPagination(${page+1})`)
+            document.getElementById('second-page').textContent = page + 1
+            document.getElementById('second-page').parentElement.className = "page-item"
+            document.getElementById('third-page').setAttribute("onclick", `handleWithPagination(${page+2})`)
+            document.getElementById('third-page').textContent = page + 2
+            document.getElementById('third-page').parentElement.className = "page-item"
+            $('html,body').scrollTop(0);
+        })
+    }
+
+    if (!page && action === "previous") {
+        const page = Number(document.getElementById('first-page').textContent || 2) - 1
+        handleWithPagination(page)
+    } else if (!page && action === "next") {
+        const page = Number(document.getElementById('first-page').textContent || 2) + 1
+        handleWithPagination(page)
+    }
+
+}

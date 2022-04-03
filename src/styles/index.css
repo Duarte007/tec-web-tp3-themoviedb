@@ -1,0 +1,29 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item>a:hover {
+    color: rgb(255, 255, 255)!important;
+}
+
+.navbar-nav>.active>a {
+    font-weight: bold;
+    color: rgb(255, 255, 255)!important;
+}
+
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    margin: 20px 5px 10px 5px;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+}
