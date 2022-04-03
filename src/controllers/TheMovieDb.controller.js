@@ -6,7 +6,7 @@ const TheMovieDbController = {
             document.getElementById("movies").innerHTML = ""
             lastPage = response.total_pages
             response.results.forEach((movie) => {
-                TheMovieDbController.appendMovieCard(movie.title, movie.overview, movie.poster_path, movie.release_date)
+                TheMovieDbController.appendMovieCard(movie.id, movie.title, movie.overview, movie.poster_path, movie.release_date)
             });
             return response
         })
@@ -15,7 +15,7 @@ const TheMovieDbController = {
         return TheMovieDbService.getUpcomingMovies(page).then(response => {
             document.getElementById("movies").innerHTML = ""
             response.results.forEach((movie) => {
-                TheMovieDbController.appendMovieCard(movie.title, movie.overview, movie.poster_path, movie.release_date)
+                TheMovieDbController.appendMovieCard(movie.id, movie.title, movie.overview, movie.poster_path, movie.release_date)
             });
             return response
         })
@@ -24,7 +24,7 @@ const TheMovieDbController = {
         return TheMovieDbService.getTopRatedMovies(page).then(response => {
             document.getElementById("movies").innerHTML = ""
             response.results.forEach((movie) => {
-                TheMovieDbController.appendMovieCard(movie.title, movie.overview, movie.poster_path, movie.release_date)
+                TheMovieDbController.appendMovieCard(movie.id, movie.title, movie.overview, movie.poster_path, movie.release_date)
             });
             return response
         })
@@ -36,16 +36,18 @@ const TheMovieDbController = {
             TheMovieDbService.getMoviesByFilter(filter, page).then(response => {
                 document.getElementById("movies").innerHTML = ""
                 response.results && response.results.forEach((movie) => {
-                    TheMovieDbController.appendMovieCard(movie.title, movie.overview, movie.poster_path, movie.release_date)
+                    TheMovieDbController.appendMovieCard(movie.id, movie.title, movie.overview, movie.poster_path, movie.release_date)
                 });
             })
         }, 300)
     },
-    appendMovieCard: (title, overview, posterPath, releaseDate) => {
+    appendMovieCard: async(movieId, title, overview, posterPath, releaseDate) => {
         const prefixImage = "https://image.tmdb.org/t/p/w500/";
         let textHTML = "";
 
         overview = overview.length > 200 ? overview.substring(0, 200) + '...' : overview.substring(0, overview.length)
+
+        const movieDetails = await TheMovieDbService.getMovieDetails(movieId)
 
         textHTML = `
         <div class="card" style="width: 18rem">
@@ -58,7 +60,7 @@ const TheMovieDbController = {
             <p class="card-text">
                 ${overview}
             </p>
-            <a href="#" class="btn btn-primary">Mais detalhes...</a>
+            <a target="_blank" href="${movieDetails.homepage || '#'}" class="btn btn-primary">Mais detalhes...</a>
         </div>
         `;
 

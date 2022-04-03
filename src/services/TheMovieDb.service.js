@@ -8,6 +8,10 @@ const TheMovieDbService = {
         return fetch(`${url}/movie/popular?${queryString}`, { method: "GET" })
             .then((response) => response.json())
             .then((data) => data)
+            .catch(error => {
+                console.log(error)
+                throw new Error(error)
+            })
     },
     getUpcomingMovies: (page = 1) => {
         const queryString = `api_key=${apiKey}&page=${page}`
@@ -15,6 +19,10 @@ const TheMovieDbService = {
         return fetch(`${url}/movie/upcoming?${queryString}`, { method: "GET" })
             .then((response) => response.json())
             .then((data) => data)
+            .catch(error => {
+                console.log(error)
+                throw new Error(error)
+            })
 
     },
     getTopRatedMovies: (page = 1) => {
@@ -23,6 +31,10 @@ const TheMovieDbService = {
         return fetch(`${url}/movie/top_rated?${queryString}`, { method: "GET" })
             .then((response) => response.json())
             .then((data) => data)
+            .catch(error => {
+                console.log(error)
+                throw new Error(error)
+            })
     },
     getMoviesByFilter: (filter, page = 1) => {
         if (!filter) return TheMovieDbService.getPopularMovies()
@@ -31,5 +43,19 @@ const TheMovieDbService = {
         return fetch(`${url}/search/movie?${queryString}`, { method: "GET" })
             .then((response) => response.json())
             .then((data) => data)
+            .catch(error => {
+                console.log(error)
+                throw new Error(error)
+            })
+    },
+    getMovieDetails: (movieId) => {
+        let queryString = `api_key=${apiKey}`
+        return fetch(`${url}/movie/${movieId}?${queryString}`, { method: "GET" })
+            .then((response) => response.json())
+            .then((data) => data)
+            .catch(error => {
+                console.log(error)
+                throw new Error(error)
+            })
     }
 }
