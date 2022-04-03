@@ -27,6 +27,8 @@ function handleWithPagination(page, action) {
             document.getElementById('third-page').setAttribute("onclick", `handleWithPagination(${page+2})`)
             document.getElementById('third-page').textContent = page + 2
             document.getElementById('third-page').parentElement.className = "page-item"
+            document.getElementById('previous').parentElement.className = "page-item"
+            document.getElementById('next').parentElement.className = "page-item"
             $('html,body').scrollTop(0);
         })
     }
